@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 import '../DB/DatabaseHelper.dart';
-import '../HomeScreen.dart';
 import 'Recognition.dart';
 
 class Recognizer {
@@ -25,6 +24,14 @@ class Recognizer {
     }
     loadModel();
     initDB();
+  }
+
+  Future<void> loadModel() async {
+    try {
+      interpreter = await Interpreter.fromAsset(modelName, options: _interpreterOptions);
+    } catch (e) {
+      print('Unable to create interpreter, Caught Exception: ${e.toString()}');
+    }
   }
 
   initDB() async {
@@ -72,13 +79,13 @@ class Recognizer {
   }
 
 
-  Future<void> loadModel() async {
+ /* Future<void> loadModel() async {
     try {
       interpreter = await Interpreter.fromAsset(modelName);
     } catch (e) {
       print('Unable to create interpreter, Caught Exception: ${e.toString()}');
     }
-  }
+  }*/
 
   List<dynamic> imageToArray(img.Image inputImage){
     img.Image resizedImage = img.copyResize(inputImage!, width: WIDTH, height: HEIGHT);
